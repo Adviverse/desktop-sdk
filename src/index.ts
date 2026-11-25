@@ -6,6 +6,7 @@
  *   import { mountAd, fetchAd } from '@adviverse/desktop';
  * React:            @adviverse/desktop-react   (<AdviverseAd/>)
  * Electron:         @adviverse/electron        (main-process + preload bridge)
+ * Tauri v2:         @adviverse/tauri           (core + opener-plugin click bridge)
  */
 export type { Ad, AdviverseConfig } from './core';
 export { fetchAd, openClick, fireImpression, observeViewability } from './core';

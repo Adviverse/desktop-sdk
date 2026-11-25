@@ -19,6 +19,7 @@ npm install @adviverse/desktop
 | Any webview, no framework (Tauri, CEF, WKWebView, WebView2, Electron renderer) | `@adviverse/desktop` | [desktop-sdk](https://github.com/Adviverse/desktop-sdk) |
 | React renderer | `@adviverse/desktop-react` | [desktop-react-sdk](https://github.com/Adviverse/desktop-react-sdk) |
 | Electron main process (click → system browser) | `@adviverse/electron` | [electron-sdk](https://github.com/Adviverse/electron-sdk) |
+| Tauri v2 (core + click → system browser) | `@adviverse/tauri` | [tauri-sdk](https://github.com/Adviverse/tauri-sdk) |
 
 Get a **serve token** (`ts_…`) from your Adviverse dashboard (Publisher →
 Placements → terminal/SDK token). `ak_…` API keys and publisher placement tags
@@ -54,8 +55,9 @@ if (ad) {
 A display-ad click must open the **default browser**, not navigate your app
 window. `openClick()` auto-detects the host:
 
-- **Tauri** — uses the shell-open plugin (add `@tauri-apps/plugin-shell` and
-  allow `shell:open`).
+- **Tauri v2** — use [`@adviverse/tauri`](https://github.com/Adviverse/tauri-sdk)
+  (`installAdviverse()`, opener plugin). Tauri v1 with `withGlobalTauri` uses
+  `window.__TAURI__.shell.open`.
 - **Electron** — expose a bridge from the main process (below).
 - **Fallback** — `window.open(url, '_blank')`.
 
