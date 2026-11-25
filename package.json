@@ -1,6 +1,6 @@
 {
   "name": "@adviverse/desktop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Adviverse ads for native desktop apps that host a webview (Electron, Tauri, CEF, WKWebView, WebView2).",
   "license": "UNLICENSED",
   "type": "module",

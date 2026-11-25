@@ -6,7 +6,7 @@
  *
  * Builds a disclosed ad card in `el`, fires the impression on viewability, and
  * opens clicks in the default browser. Returns a disposer. Renders nothing on
- * no-fill. Re-render with `refreshMs` for rotation.
+ * no-fill. Re-render with `refreshMs` for rotation (min 30s; paused while hidden).
  */
 import { Ad, AdviverseConfig, fetchAd, observeViewability, openClick } from './core';
 
@@ -62,7 +62,9 @@ export function mountAd(el: Element, opts: MountOptions): () => void {
 
   const load = () => fetchAd(opts).then(render);
   load();
-  const id = opts.refreshMs ? setInterval(load, opts.refreshMs) : undefined;
+  // Rotation floor 30s (faster refreshes are voided as repeat views anyway); skip while the window is hidden.
+  const refresh = () => { if (typeof document === 'undefined' || document.visibilityState === 'visible') load(); };
+  const id = opts.refreshMs ? setInterval(refresh, Math.max(30_000, opts.refreshMs)) : undefined;
 
   return () => {
     alive = false;
