@@ -123,19 +123,21 @@ export async function fetchAd(cfg: AdviverseConfig): Promise<Ad | null> {
 export function openClick(ad: Ad): void {
   const url = ad.url || ad.short_url;
   if (!url) return;
-  // Electron: the app's preload should expose window.adviverse.openExternal →
-  // shell.openExternal (see electron.ts). Tauri: the shell-open plugin. Else the
-  // webview's window.open, which most hosts route to the system browser.
+  // Electron: the app's preload exposes window.adviverse.openExternal (@adviverse/electron;
+  // @adviverse/tauri's installAdviverse() sets it too). Tauri v2: the opener plugin via
+  // __TAURI_INTERNALS__.invoke; falls back to window.open if the plugin isn't registered.
+  // Tauri v1 (withGlobalTauri): __TAURI__.shell.open. Else window.open.
+  const fallback = () => w.open?.(url, '_blank', 'noopener,noreferrer');
   try {
     if (typeof w.adviverse?.openExternal === 'function') { w.adviverse.openExternal(url); return; }
-    const tauriOpen = (w.__TAURI__ as { shell?: { open?: (u: string) => unknown } } | undefined)?.shell?.open;
-    if (typeof tauriOpen === 'function') { tauriOpen(url); return; }
-    if (w.__TAURI_INTERNALS__ && typeof (w as unknown as { __TAURI_INVOKE__?: unknown }).__TAURI_INVOKE__ !== 'undefined') {
-      // Tauri v2 with the shell plugin registered.
-      (w as unknown as { __TAURI__?: { core?: { invoke?: (c: string, a: unknown) => unknown } } }).__TAURI__?.core?.invoke?.('plugin:shell|open', { path: url });
+    const invoke = (w.__TAURI_INTERNALS__ as { invoke?: (cmd: string, args: unknown) => Promise<unknown> } | undefined)?.invoke;
+    if (typeof invoke === 'function') {
+      if (/^https?:\/\//i.test(url)) invoke('plugin:opener|open_url', { url }).catch(fallback);
       return;
     }
-    w.open?.(url, '_blank', 'noopener,noreferrer');
+    const tauriOpen = (w.__TAURI__ as { shell?: { open?: (u: string) => unknown } } | undefined)?.shell?.open;
+    if (typeof tauriOpen === 'function') { tauriOpen(url); return; }
+    fallback();
   } catch { /* best-effort */ }
 }
 
