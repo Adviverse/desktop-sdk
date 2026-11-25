@@ -4,8 +4,8 @@
  *
  * Renderer entry (no React): core loop + a framework-free mount.
  *   import { mountAd, fetchAd } from '@adviverse/desktop';
- * React:            import { AdviverseAd } from '@adviverse/desktop/react';
- * Electron main:    import { registerAdviverse } from '@adviverse/desktop/electron';
+ * React:            @adviverse/desktop-react   (<AdviverseAd/>)
+ * Electron:         @adviverse/electron        (main-process + preload bridge)
  */
 export type { Ad, AdviverseConfig } from './core';
 export { fetchAd, openClick, fireImpression, observeViewability } from './core';

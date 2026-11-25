@@ -14,28 +14,15 @@ core instead: [`@adviverse/desktop-native`](../desktop-native) (C ABI).
 npm install @adviverse/desktop
 ```
 
+| You use | Package | Repo |
+|---|---|---|
+| Any webview, no framework (Tauri, CEF, WKWebView, WebView2, Electron renderer) | `@adviverse/desktop` | [desktop-sdk](https://github.com/Adviverse/desktop-sdk) |
+| React renderer | `@adviverse/desktop-react` | [desktop-react-sdk](https://github.com/Adviverse/desktop-react-sdk) |
+| Electron main process (click → system browser) | `@adviverse/electron` | [electron-sdk](https://github.com/Adviverse/electron-sdk) |
+
 Get a **serve token** (`ts_…`) from your Adviverse dashboard (Publisher →
 Placements → terminal/SDK token). `ak_…` API keys and publisher placement tags
 also work.
-
-## Renderer — React
-
-```tsx
-import { AdviverseAd } from '@adviverse/desktop/react';
-
-// A disclosed ad card. Renders nothing on no-fill; rotates if you pass refreshMs.
-<AdviverseAd token="ts_yourtoken" refreshMs={60000} />
-```
-
-Bring your own markup with a render prop:
-
-```tsx
-<AdviverseAd token="ts_yourtoken">
-  {(ad, onClick) => (
-    <button onClick={onClick}>{ad.label} · {ad.text} {ad.cta && `— ${ad.cta}`}</button>
-  )}
-</AdviverseAd>
-```
 
 ## Renderer — no framework
 
@@ -72,28 +59,10 @@ window. `openClick()` auto-detects the host:
 - **Electron** — expose a bridge from the main process (below).
 - **Fallback** — `window.open(url, '_blank')`.
 
-### Electron bridge (one-time)
+### Electron bridge
 
-```ts
-// main.ts
-import { app, BrowserWindow } from 'electron';
-import { registerAdviverseIpc, adviversePreloadPath } from '@adviverse/desktop/electron';
-
-app.whenReady().then(() => {
-  registerAdviverseIpc(); // handles openExternal, http(s) only
-  new BrowserWindow({
-    webPreferences: { contextIsolation: true, preload: adviversePreloadPath() },
-  });
-});
-```
-
-Already have a preload? Add one line to it instead:
-
-```ts
-// preload.ts
-import { exposeAdviverse } from '@adviverse/desktop/electron';
-exposeAdviverse();               // → window.adviverse.openExternal
-```
+Electron apps install [`@adviverse/electron`](https://github.com/Adviverse/electron-sdk)
+in the main process (one call + a ready-made preload).
 
 ## What "done right" means (built in)
 

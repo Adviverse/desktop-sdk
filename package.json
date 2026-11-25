@@ -1,35 +1,34 @@
 {
   "name": "@adviverse/desktop",
-  "version": "0.1.1",
-  "description": "Adviverse ads for native desktop apps that host a webview (Electron, Tauri, CEF, WKWebView, WebView2).",
+  "version": "0.2.0",
+  "description": "Adviverse ads for desktop apps that host a webview (Electron, Tauri, CEF, WKWebView, WebView2) \u2014 core loop + framework-free mount. React: @adviverse/desktop-react. Electron bridge: @adviverse/electron.",
   "license": "UNLICENSED",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
-    "./react": { "types": "./dist/react.d.ts", "import": "./dist/react.js" },
-    "./electron": { "types": "./dist/electron.d.ts", "import": "./dist/electron.js" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "peerDependencies": {
-    "react": ">=17",
-    "electron": ">=22"
-  },
-  "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "electron": { "optional": true }
-  },
   "devDependencies": {
-    "@types/react": "^18.3.0",
-    "@types/node": "^22.0.0",
-    "electron": "^30.0.0",
-    "react": "^18.3.0",
     "typescript": "^5.6.2"
   },
-  "keywords": ["adviverse", "ads", "desktop", "electron", "tauri", "webview"]
+  "keywords": [
+    "adviverse",
+    "ads",
+    "desktop",
+    "tauri",
+    "webview",
+    "electron"
+  ]
 }
